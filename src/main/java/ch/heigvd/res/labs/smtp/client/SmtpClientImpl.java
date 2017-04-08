@@ -48,14 +48,15 @@ public class SmtpClientImpl implements ISmtpClient {
         LOG.info(response);
 
 
-        sendToServer(SmtpProtocol.CMD_EHLO + "prankGenerator.com");
+        sendToServer(SmtpProtocol.CMD_EHLO + "prankGenerator.com\r\n");
 
-        while (!(response =in.readLine()).startsWith("250 ")) {
-            System.out.println(response);
+
+        while (!(response = in.readLine()).startsWith("250 ")) {
+            LOG.info(response);
 
         }
 
-        sendToServer(SmtpProtocol.CMD_MAIL_FROM + p.getEnvoyeur().getEmail());
+        sendToServer(SmtpProtocol.CMD_MAIL_FROM + p.getEnvoyeur().getEmail()+"\r\n");
         response=in.readLine();
         LOG.info(response);
 
@@ -71,9 +72,9 @@ public class SmtpClientImpl implements ISmtpClient {
             LOG.info(response);
         }
 
-        sendToServer(SmtpProtocol.CMD_DATA);
+        sendToServer(SmtpProtocol.CMD_DATA+"\r\n");
         response=in.readLine();
-        LOG.info("DATA : "+response);
+        LOG.info(response);
 
         out.write("From: " + p.getEnvoyeur().getEmail() + "\r\n");
 
@@ -100,7 +101,7 @@ public class SmtpClientImpl implements ISmtpClient {
         sendToServer(SmtpProtocol.CMD_DATA_END);
 
         response=in.readLine();
-        LOG.info("End of data : "+response);
+        LOG.info(response);
 
         sendToServer(SmtpProtocol.CMD_BYE);
         socket.close();

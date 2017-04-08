@@ -57,6 +57,22 @@ public class Config implements IConfig {
         return result;
     }
 
+    public List<Personne> getVictims() {
+        return victims;
+    }
+
+    public List<String> getMessages() {
+        return messages;
+    }
+
+    public int getNumberOfGroups() {
+        return numberOfGroups;
+    }
+
+    public List<Personne> getCc() {
+        return cc;
+    }
+
     private void loadProprietes(String fileName) throws IOException {
         FileInputStream fis = new FileInputStream(fileName);
         Properties properties = new Properties();

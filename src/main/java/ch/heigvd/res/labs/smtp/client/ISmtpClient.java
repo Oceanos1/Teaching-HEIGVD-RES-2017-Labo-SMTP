@@ -1,6 +1,7 @@
 package ch.heigvd.res.labs.smtp.client;
 
 import ch.heigvd.res.labs.smtp.model.mail.Mail;
+import ch.heigvd.res.labs.smtp.model.prank.Prank;
 
 import java.io.IOException;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
 public interface ISmtpClient {
 
 
-    public void sendMessage(Mail m) throws IOException;
+    public void sendMessage(Prank p) throws IOException;
 
 
 }

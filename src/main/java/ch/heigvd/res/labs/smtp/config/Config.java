@@ -20,7 +20,7 @@ public class Config implements IConfig {
     private List<Personne> cc;
 
     public Config() throws IOException {
-        victims = loadAddressesFromFile("./config/victims.RES.utf8");
+        victims = loadAddressesFromFile("./config/victimes.RES.utf8");
         messages = loadMessagesFromFile("./config/messages.utf8");
         loadProprietes("./config/config.properties");
     }
@@ -50,6 +50,7 @@ public class Config implements IConfig {
             StringBuilder sb = new StringBuilder();
             while ((line != null) && (!line.equals("=="))) {
                 sb.append(line + "\r\n");
+                line = reader.readLine();
             }
             result.add(sb.toString());
             line = reader.readLine();
@@ -67,6 +68,12 @@ public class Config implements IConfig {
 
     public int getNumberOfGroups() {
         return numberOfGroups;
+    }
+    public int getSmtpServerPort() {
+        return smtpServerPort;
+    }
+    public String getSmtpServerAddress() {
+        return smtpServerAddress;
     }
 
     public List<Personne> getCc() {

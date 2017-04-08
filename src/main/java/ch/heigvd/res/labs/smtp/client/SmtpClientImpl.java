@@ -2,6 +2,8 @@ package ch.heigvd.res.labs.smtp.client;
 
 
 import ch.heigvd.res.labs.smtp.model.mail.Mail;
+import ch.heigvd.res.labs.smtp.model.mail.Personne;
+import ch.heigvd.res.labs.smtp.model.prank.Prank;
 import ch.heigvd.res.labs.smtp.protocol.SmtpProtocol;
 
 import java.io.*;
@@ -36,7 +38,7 @@ public class SmtpClientImpl implements ISmtpClient {
     }
 
 
-    public void sendMessage(Mail m) throws IOException {
+    public void sendMessage(Prank p) throws IOException {
         socket = new Socket(smtpServerAdress, smtpServerPort);
         in = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
         out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"), true);
@@ -46,47 +48,47 @@ public class SmtpClientImpl implements ISmtpClient {
             LOG.info(in.readLine());
         }
 
-        sendToServer(SmtpProtocol.CMD_MAIL_FROM + m.getSender());
+        sendToServer(SmtpProtocol.CMD_MAIL_FROM + p.getEnvoyeur().getEmail());
         LOG.info(in.readLine());
 
-        for (String reciever : m.getRecievers()) {
-            sendToServer(SmtpProtocol.CMD_RCPT_TO + reciever + "\r\n");
+        for (Personne reciever : p.getReceveurs()) {
+            sendToServer(SmtpProtocol.CMD_RCPT_TO + reciever.getEmail() + "\r\n");
             LOG.info(in.readLine());
         }
 
-        for (String reciever : m.getCC()) {
-            sendToServer(SmtpProtocol.CMD_RCPT_TO + reciever + "\r\n");
+        for (Personne reciever : p.getCc()) {
+            sendToServer(SmtpProtocol.CMD_RCPT_TO + reciever.getEmail() + "\r\n");
             LOG.info(in.readLine());
         }
 
         sendToServer(SmtpProtocol.CMD_DATA);
         LOG.info(in.readLine());
 
-        out.write("From: " + m.getSender() + "\r\n");
+        out.write("From: " + p.getEnvoyeur().getEmail() + "\r\n");
 
-        ArrayList<String> recievers = m.getRecievers();
-        ArrayList<String> cc = m.getCC();
+       // ArrayList<String> recievers = p.getRecievers();
+       // ArrayList<String> cc = p.getCC();
 
 
-        if (m.getRecievers().size() != 0) {
-            out.write("To: " + recievers.get(0));
-            for (int i = 1; i < recievers.size(); ++i) {
-                out.write(", " + recievers.get(i));
+        if (p.getReceveurs().size() != 0) {
+            out.write("To: " + p.getReceveurs().get(0).getEmail());
+            for (int i = 1; i < p.getReceveurs().size(); ++i) {
+                out.write(", " + p.getReceveurs().get(i).getEmail());
             }
             out.write("\r\n");
         }
 
-        if (m.getCC().size() != 0) {
-            out.write("Cc: " + cc.get(0));
-            for (int i = 1; i < cc.size(); ++i) {
-                out.write(", " + cc.get(i));
+        if (p.getCc().size() != 0) {
+            out.write("Cc: " + p.getCc().get(0).getEmail());
+            for (int i = 1; i < p.getCc().size(); ++i) {
+                out.write(", " + p.getCc().get(i).getEmail());
             }
             out.write("\r\n");
         }
 
         out.flush();
 
-        sendToServer(m.getMessage());
+        sendToServer(p.getMessageToSend());
         sendToServer(SmtpProtocol.CMD_DATA_END);
 
         LOG.info(in.readLine());

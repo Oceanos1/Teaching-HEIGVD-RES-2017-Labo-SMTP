@@ -1,5 +1,6 @@
 package ch.heigvd.res.labs.smtp.model.prank;
 
+import ch.heigvd.res.labs.smtp.model.mail.Mail;
 import ch.heigvd.res.labs.smtp.model.mail.Personne;
 
 import java.util.ArrayList;
@@ -37,4 +38,5 @@ public class Prank {
     public String getMessageToSend() {
         return messageToSend;
     }
+
 }

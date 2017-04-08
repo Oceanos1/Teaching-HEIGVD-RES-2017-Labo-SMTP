@@ -23,4 +23,9 @@ public interface IConfig {
     int getNumberOfGroups();
 
     List<Personne> getCc();
+
+    public String getSmtpServerAddress();
+
+    public int getSmtpServerPort();
+
 }

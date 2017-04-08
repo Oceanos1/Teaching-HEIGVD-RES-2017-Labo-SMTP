@@ -1,5 +1,7 @@
 package ch.heigvd.res.labs.smtp;
 
+import ch.heigvd.res.labs.smtp.model.mail.Personne;
+
 import java.io.*;
 import java.util.ArrayList;
 

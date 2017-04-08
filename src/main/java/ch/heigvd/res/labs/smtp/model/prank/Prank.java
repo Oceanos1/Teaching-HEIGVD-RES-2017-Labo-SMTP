@@ -1,4 +1,6 @@
-package ch.heigvd.res.labs.smtp;
+package ch.heigvd.res.labs.smtp.model.prank;
+
+import ch.heigvd.res.labs.smtp.model.mail.Personne;
 
 import java.util.ArrayList;
 

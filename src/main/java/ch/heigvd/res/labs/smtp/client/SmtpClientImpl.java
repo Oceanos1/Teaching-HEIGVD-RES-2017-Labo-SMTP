@@ -1,93 +1,100 @@
 package ch.heigvd.res.labs.smtp.client;
 
 
+import ch.heigvd.res.labs.smtp.model.mail.Mail;
 import ch.heigvd.res.labs.smtp.protocol.SmtpProtocol;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
-import java.util.logging.Level;
+import java.util.ArrayList;
 import java.util.logging.Logger;
 
 /**
  * This class implements the client side of the protocol specification (version 1).
- *
+ * <p>
  * Created by Michael on 04.04.2017.
  */
 public class SmtpClientImpl implements ISmtpClient {
 
 
-    private static final Logger LOG = Logger.getLogger(ISmtpClient.class.getName());
+    private static final Logger LOG = Logger.getLogger(SmtpClientImpl.class.getName());
 
-    Socket socket;
-    boolean connected = false;
-    BufferedReader in;
-    PrintWriter out;
+    private String smtpServerAdress;
+    private int smtpServerPort = 25;
+    private Socket socket;
+    private BufferedReader in;
+    private PrintWriter out;
 
-    void sendToServer(String s) {
+    public SmtpClientImpl(String smtpServerAdress, int port) throws IOException {
+        this.smtpServerAdress = smtpServerAdress;
+        this.smtpServerPort = port;
+    }
+
+    private void sendToServer(String s) {
         out.println(s);
         out.flush();
     }
 
-    public void connect(String server, int port) throws IOException {
-        try {
-            socket = new Socket(server, port);
-            connected = true;
-            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            out = new PrintWriter(socket.getOutputStream());
-        } catch (IOException e) {
-            LOG.log(Level.SEVERE, "Unable to connect to server: {0}", e.getMessage());
-            return;
-        }
-        in.readLine();
-    }
 
-    public void disconnect() throws IOException {
-        LOG.log(Level.INFO, "client has requested to be disconnected.");
-        if (connected == false) {
-            return;
-        }
-        connected = false;
-        sendToServer(SmtpProtocol.CMD_BYE);
-
-        //close input output & socket
-        out.close();
-        in.close();
-        socket.close();
-    }
-
-    public boolean isConnected() {
-        return connected;
-    }
-
-
-    public void sendMessage() throws IOException {
-
+    public void sendMessage(Mail m) throws IOException {
+        socket = new Socket(smtpServerAdress, smtpServerPort);
+        in = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
+        out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"), true);
+        LOG.info(in.readLine());
         sendToServer(SmtpProtocol.CMD_EHLO);
-        while (!in.readLine().startsWith("250 ")){
-
+        while (!in.readLine().startsWith("250 ")) {
+            LOG.info(in.readLine());
         }
 
-        sendToServer(SmtpProtocol.CMD_MAIL_FROM);
-        in.readLine();
-        for(int i = 0; i< nbPeople; ++i){
-            sendToServer(SmtpProtocol.CMD_RCPT_TO +);
-            in.readLine();
+        sendToServer(SmtpProtocol.CMD_MAIL_FROM + m.getSender());
+        LOG.info(in.readLine());
+
+        for (String reciever : m.getRecievers()) {
+            sendToServer(SmtpProtocol.CMD_RCPT_TO + reciever + "\r\n");
+            LOG.info(in.readLine());
+        }
+
+        for (String reciever : m.getCC()) {
+            sendToServer(SmtpProtocol.CMD_RCPT_TO + reciever + "\r\n");
+            LOG.info(in.readLine());
         }
 
         sendToServer(SmtpProtocol.CMD_DATA);
-        in.readLine();
+        LOG.info(in.readLine());
 
-        //From:
-        sendToServer();
-        //to:
-        //subject
-        //message
+        out.write("From: " + m.getSender() + "\r\n");
 
+        ArrayList<String> recievers = m.getRecievers();
+        ArrayList<String> cc = m.getCC();
+
+
+        if (m.getRecievers().size() != 0) {
+            out.write("To: " + recievers.get(0));
+            for (int i = 1; i < recievers.size(); ++i) {
+                out.write(", " + recievers.get(i));
+            }
+            out.write("\r\n");
+        }
+
+        if (m.getCC().size() != 0) {
+            out.write("Cc: " + cc.get(0));
+            for (int i = 1; i < cc.size(); ++i) {
+                out.write(", " + cc.get(i));
+            }
+            out.write("\r\n");
+        }
+
+        out.flush();
+
+        sendToServer(m.getMessage());
         sendToServer(SmtpProtocol.CMD_DATA_END);
-        in.readLine();
+
+        LOG.info(in.readLine());
+
+        sendToServer(SmtpProtocol.CMD_BYE);
+        socket.close();
+        in.close();
+        out.close();
         System.out.println("prank over");
     }
 

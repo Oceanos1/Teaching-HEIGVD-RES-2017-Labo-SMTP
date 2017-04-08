@@ -1,7 +1,7 @@
 package ch.heigvd.res.labs.smtp;
 
 
-
+import ch.heigvd.res.labs.smtp.model.mail.Personne;
 
 /**
  * Created by Michael on 04.04.2017.

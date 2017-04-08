@@ -72,7 +72,7 @@ public class SmtpClientImpl implements ISmtpClient {
             LOG.info(response);
         }
 
-        sendToServer(SmtpProtocol.CMD_DATA+"\r\n");
+        sendToServer(SmtpProtocol.CMD_DATA);
         response=in.readLine();
         LOG.info(response);
 

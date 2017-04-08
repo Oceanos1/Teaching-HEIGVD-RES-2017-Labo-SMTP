@@ -21,7 +21,7 @@ public class PrankGenerator {
     public List<Prank> generatePranks() {
         int i = 0;
         List<Prank> pranks = new ArrayList<Prank>();
-        List<String> messages = config.getMessages();
+        List<String> messages = new ArrayList<String>(config.getMessages());
 
         int numberOfGroups = config.getNumberOfGroups();
         int numberOfVictims = config.getVictims().size();

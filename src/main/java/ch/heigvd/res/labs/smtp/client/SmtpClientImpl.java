@@ -55,8 +55,6 @@ public class SmtpClientImpl implements ISmtpClient {
 
         }
 
-        System.out.println("HELLO toi");
-
         sendToServer(SmtpProtocol.CMD_MAIL_FROM + p.getEnvoyeur().getEmail());
         response=in.readLine();
         LOG.info(response);
@@ -75,12 +73,9 @@ public class SmtpClientImpl implements ISmtpClient {
 
         sendToServer(SmtpProtocol.CMD_DATA);
         response=in.readLine();
-        LOG.info(response);
+        LOG.info("DATA : "+response);
 
         out.write("From: " + p.getEnvoyeur().getEmail() + "\r\n");
-
-       // ArrayList<String> recievers = p.getRecievers();
-       // ArrayList<String> cc = p.getCC();
 
 
         if (p.getReceveurs().size() != 0) {
@@ -105,7 +100,7 @@ public class SmtpClientImpl implements ISmtpClient {
         sendToServer(SmtpProtocol.CMD_DATA_END);
 
         response=in.readLine();
-        LOG.info(response);
+        LOG.info("End of data : "+response);
 
         sendToServer(SmtpProtocol.CMD_BYE);
         socket.close();

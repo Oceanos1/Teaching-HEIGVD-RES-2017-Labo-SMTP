@@ -24,11 +24,9 @@ public class SmtpPrankApplication {
         SmtpClientImpl sci = new SmtpClientImpl(config.getSmtpServerAddress(),config.getSmtpServerPort());
 
         List<Prank> pranks = prankGenerator.generatePranks();
-        //List<Group> groups = prankGenerator.generateGroups();
         for(Prank p : pranks){
             sci.sendMessage(p);
         }
 
-        //sci.sendMessage();
     }
 }

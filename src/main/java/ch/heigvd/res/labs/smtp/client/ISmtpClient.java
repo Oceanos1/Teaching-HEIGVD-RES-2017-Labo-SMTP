@@ -33,7 +33,7 @@ public interface ISmtpClient {
      */
     public boolean isConnected();
 
-    public void sendMessage();
+    public void sendMessage() throws IOException;
 
 
 }

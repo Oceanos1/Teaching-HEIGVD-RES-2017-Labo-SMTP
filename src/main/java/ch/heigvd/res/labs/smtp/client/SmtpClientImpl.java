@@ -63,8 +63,32 @@ public class SmtpClientImpl implements ISmtpClient {
     }
 
 
-    public void sendMessage(){
+    public void sendMessage() throws IOException {
 
+        sendToServer(SmtpProtocol.CMD_EHLO);
+        while (!in.readLine().startsWith("250 ")){
+
+        }
+
+        sendToServer(SmtpProtocol.CMD_MAIL_FROM);
+        in.readLine();
+        for(int i = 0; i< nbPeople; ++i){
+            sendToServer(SmtpProtocol.CMD_RCPT_TO +);
+            in.readLine();
+        }
+
+        sendToServer(SmtpProtocol.CMD_DATA);
+        in.readLine();
+
+        //From:
+        sendToServer();
+        //to:
+        //subject
+        //message
+
+        sendToServer(SmtpProtocol.CMD_DATA_END);
+        in.readLine();
+        System.out.println("prank over");
     }
 
 

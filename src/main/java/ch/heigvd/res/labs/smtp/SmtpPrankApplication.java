@@ -11,5 +11,7 @@ public class SmtpPrankApplication {
     public static void main(String[] args) {
         Personne mika = new Personne("michael.spierer@heig-vd.ch");
 
+
+
     }
 }

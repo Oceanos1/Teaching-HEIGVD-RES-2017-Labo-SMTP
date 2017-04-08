@@ -33,7 +33,7 @@ public class SmtpClientImpl implements ISmtpClient {
     }
 
     private void sendToServer(String s) {
-        out.println(s);
+        out.print(s);
         out.flush();
     }
 
@@ -53,8 +53,8 @@ public class SmtpClientImpl implements ISmtpClient {
 
         while (!(response = in.readLine()).startsWith("250 ")) {
             LOG.info(response);
-
         }
+        LOG.info(response);
 
         sendToServer(SmtpProtocol.CMD_MAIL_FROM + p.getEnvoyeur().getEmail()+"\r\n");
         response=in.readLine();
@@ -107,7 +107,6 @@ public class SmtpClientImpl implements ISmtpClient {
         socket.close();
         in.close();
         out.close();
-        System.out.println("prank over");
     }
 
 

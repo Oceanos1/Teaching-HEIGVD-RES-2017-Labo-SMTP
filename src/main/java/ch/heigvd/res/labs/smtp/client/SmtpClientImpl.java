@@ -22,7 +22,7 @@ public class SmtpClientImpl implements ISmtpClient {
     private static final Logger LOG = Logger.getLogger(SmtpClientImpl.class.getName());
 
     private String smtpServerAdress;
-    private int smtpServerPort = 25;
+    private int smtpServerPort;
     private Socket socket;
     private BufferedReader in;
     private PrintWriter out;
@@ -39,30 +39,43 @@ public class SmtpClientImpl implements ISmtpClient {
 
 
     public void sendMessage(Prank p) throws IOException {
+        String response;
         socket = new Socket(smtpServerAdress, smtpServerPort);
         in = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
         out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"), true);
-        LOG.info(in.readLine());
-        sendToServer(SmtpProtocol.CMD_EHLO);
-        while (!in.readLine().startsWith("250 ")) {
-            LOG.info(in.readLine());
+
+        response=in.readLine();
+        LOG.info(response);
+
+
+        sendToServer(SmtpProtocol.CMD_EHLO + "prankGenerator.com");
+
+        while (!(response =in.readLine()).startsWith("250 ")) {
+            System.out.println("HELLO toi");
+
         }
 
+        System.out.println("HELLO toi");
+
         sendToServer(SmtpProtocol.CMD_MAIL_FROM + p.getEnvoyeur().getEmail());
-        LOG.info(in.readLine());
+        response=in.readLine();
+        LOG.info(response);
 
         for (Personne reciever : p.getReceveurs()) {
             sendToServer(SmtpProtocol.CMD_RCPT_TO + reciever.getEmail() + "\r\n");
-            LOG.info(in.readLine());
+            response=in.readLine();
+            LOG.info(response);
         }
 
         for (Personne reciever : p.getCc()) {
             sendToServer(SmtpProtocol.CMD_RCPT_TO + reciever.getEmail() + "\r\n");
-            LOG.info(in.readLine());
+            response=in.readLine();
+            LOG.info(response);
         }
 
         sendToServer(SmtpProtocol.CMD_DATA);
-        LOG.info(in.readLine());
+        response=in.readLine();
+        LOG.info(response);
 
         out.write("From: " + p.getEnvoyeur().getEmail() + "\r\n");
 
@@ -91,7 +104,8 @@ public class SmtpClientImpl implements ISmtpClient {
         sendToServer(p.getMessageToSend());
         sendToServer(SmtpProtocol.CMD_DATA_END);
 
-        LOG.info(in.readLine());
+        response=in.readLine();
+        LOG.info(response);
 
         sendToServer(SmtpProtocol.CMD_BYE);
         socket.close();

@@ -51,7 +51,7 @@ public class SmtpClientImpl implements ISmtpClient {
         sendToServer(SmtpProtocol.CMD_EHLO + "prankGenerator.com");
 
         while (!(response =in.readLine()).startsWith("250 ")) {
-            System.out.println("HELLO toi");
+            System.out.println(response);
 
         }
 

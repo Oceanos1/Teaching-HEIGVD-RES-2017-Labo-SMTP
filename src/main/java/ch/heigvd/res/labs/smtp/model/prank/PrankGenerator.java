@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Created by Michael on 08.04.2017.
+ * Created by Michael Spierer & Edward Ransome
  */
 public class PrankGenerator {
     private IConfig config;

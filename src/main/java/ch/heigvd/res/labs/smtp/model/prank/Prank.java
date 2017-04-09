@@ -1,13 +1,12 @@
 package ch.heigvd.res.labs.smtp.model.prank;
 
-import ch.heigvd.res.labs.smtp.model.mail.Mail;
 import ch.heigvd.res.labs.smtp.model.mail.Personne;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Michael on 06.04.2017.
+ * Created by Michael Spierer & Edward Ransome
  */
 public class Prank {
     private Personne envoyeur;

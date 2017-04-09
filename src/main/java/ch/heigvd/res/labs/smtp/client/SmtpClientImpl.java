@@ -1,20 +1,16 @@
 package ch.heigvd.res.labs.smtp.client;
 
 
-import ch.heigvd.res.labs.smtp.model.mail.Mail;
 import ch.heigvd.res.labs.smtp.model.mail.Personne;
 import ch.heigvd.res.labs.smtp.model.prank.Prank;
 import ch.heigvd.res.labs.smtp.protocol.SmtpProtocol;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.logging.Logger;
 
 /**
- * This class implements the client side of the protocol specification (version 1).
- * <p>
- * Created by Michael on 04.04.2017.
+ * Created by Michael Spierer & Edward Ransome
  */
 public class SmtpClientImpl implements ISmtpClient {
 
@@ -44,8 +40,7 @@ public class SmtpClientImpl implements ISmtpClient {
         in = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
         out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"), true);
 
-        response=in.readLine();
-        LOG.info(response);
+        LOG.info(in.readLine());
 
 
         sendToServer(SmtpProtocol.CMD_EHLO + "prankGenerator.com\r\n");
@@ -54,27 +49,25 @@ public class SmtpClientImpl implements ISmtpClient {
         while (!(response = in.readLine()).startsWith("250 ")) {
             LOG.info(response);
         }
+
         LOG.info(response);
 
-        sendToServer(SmtpProtocol.CMD_MAIL_FROM + p.getEnvoyeur().getEmail()+"\r\n");
-        response=in.readLine();
-        LOG.info(response);
+        sendToServer(SmtpProtocol.CMD_MAIL_FROM + p.getEnvoyeur().getEmail() + "\r\n");
+
+        LOG.info(in.readLine());
 
         for (Personne reciever : p.getReceveurs()) {
             sendToServer(SmtpProtocol.CMD_RCPT_TO + reciever.getEmail() + "\r\n");
-            response=in.readLine();
-            LOG.info(response);
+            LOG.info(in.readLine());
         }
 
         for (Personne reciever : p.getCc()) {
             sendToServer(SmtpProtocol.CMD_RCPT_TO + reciever.getEmail() + "\r\n");
-            response=in.readLine();
-            LOG.info(response);
+            LOG.info(in.readLine());
         }
 
         sendToServer(SmtpProtocol.CMD_DATA);
-        response=in.readLine();
-        LOG.info(response);
+        LOG.info(in.readLine());
 
         out.write("From: " + p.getEnvoyeur().getEmail() + "\r\n");
 
@@ -100,8 +93,7 @@ public class SmtpClientImpl implements ISmtpClient {
         sendToServer(p.getMessageToSend());
         sendToServer(SmtpProtocol.CMD_DATA_END);
 
-        response=in.readLine();
-        LOG.info(response);
+        LOG.info(in.readLine());
 
         sendToServer(SmtpProtocol.CMD_BYE);
         socket.close();

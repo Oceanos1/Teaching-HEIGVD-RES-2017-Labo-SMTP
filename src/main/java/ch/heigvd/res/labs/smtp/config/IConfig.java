@@ -2,13 +2,11 @@ package ch.heigvd.res.labs.smtp.config;
 
 import ch.heigvd.res.labs.smtp.model.mail.Personne;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 /**
- * Created by Michael on 08.04.2017.
+ * Created by Michael Spierer & Edward Ransome
  */
 public interface IConfig {
 

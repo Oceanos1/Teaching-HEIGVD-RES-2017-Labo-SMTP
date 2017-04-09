@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Properties;
 
 /**
- * Created by Michael on 08.04.2017.
+ * Created by Michael Spierer & Edward Ransome
  */
 public class Config implements IConfig {
 
@@ -19,12 +19,14 @@ public class Config implements IConfig {
     private int numberOfGroups;
     private List<Personne> cc;
 
+    //constructor
     public Config() throws IOException {
         victims = loadAddressesFromFile("./config/victimes.RES.utf8");
         messages = loadMessagesFromFile("./config/messages.utf8");
         loadProprietes("./config/config.properties");
     }
 
+    //create list of Personne from file containing list of email addresses
     public List<Personne> loadAddressesFromFile(String fileName) throws IOException {
         List<Personne> personnes = new ArrayList<Personne>();
         FileInputStream fis = new FileInputStream(fileName);
@@ -40,6 +42,7 @@ public class Config implements IConfig {
         return personnes;
     }
 
+    //Create list of String (messages) from file containing messages separate by ==
     public List<String> loadMessagesFromFile(String fileName) throws IOException {
         List<String> result = new ArrayList<String>();
         FileInputStream fis = new FileInputStream(fileName);
@@ -69,9 +72,11 @@ public class Config implements IConfig {
     public int getNumberOfGroups() {
         return numberOfGroups;
     }
+
     public int getSmtpServerPort() {
         return smtpServerPort;
     }
+
     public String getSmtpServerAddress() {
         return smtpServerAddress;
     }

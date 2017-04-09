@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Michael on 08.04.2017.
+ * Created by Michael Spierer & Edward Ransome
  */
 public class Group {
     List<Personne> group;

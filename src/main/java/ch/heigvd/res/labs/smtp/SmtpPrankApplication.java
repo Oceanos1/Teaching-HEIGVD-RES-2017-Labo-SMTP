@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Created by Michael on 04.04.2017.
+ * Created by Michael Spierer & Edward Ransome
  */
 public class SmtpPrankApplication {
 

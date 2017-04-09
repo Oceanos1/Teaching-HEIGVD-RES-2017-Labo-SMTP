@@ -1,7 +1,7 @@
 # Teaching-HEIGVD-RES-2017-Labo-SMTP
 
 ## Objectives
-This program allows a user to send pranks by email: they can be sent from any email adress to a list of other adresses. The SMTP server and port via which the emails are sent can be configured by the user, as can all the adresses.
+This program allows a user to send pranks by email: once the user has entered a list of email adresses, random senders will be selected and the program will send pranks to other adresses on the list. The SMTP server and port via which the emails are sent can be configured by the user, as can all the adresses.
 
 ## Instructions
 
